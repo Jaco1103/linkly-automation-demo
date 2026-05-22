@@ -631,9 +631,6 @@
             </div>
           </div>
         </div>
-        <div class="schedule-info">
-          Idempotent by design — quiet days are a no-op log line, writes only on rotation days. Quiet run: <strong>~15–25s</strong> · Rotation run: <strong>~30–60s</strong>. The bigger prize isn't T2's weekly chore — it's every agent's mid-ticket Ctrl+Shift+V step gone, on every booking macro send.
-        </div>
       </div>
     </div>
 
@@ -691,45 +688,6 @@
         </table>
       </div>
 
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title">Failures handled</div>
-            <div class="panel-sub">Caught by the Try/Catch scope · single transient 5xx auto-retries next day</div>
-          </div>
-        </div>
-        <table class="data-table">
-          <thead>
-            <tr><th>Failure</th><th>Meaning</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="link-name">Linkly 401</span></td>
-              <td>API key expired or revoked · rotation stops · customers eventually hit dead links</td>
-            </tr>
-            <tr>
-              <td><span class="link-name">Zendesk 401</span></td>
-              <td>API token expired · macros stop updating · agents send stale URLs</td>
-            </tr>
-            <tr>
-              <td><span class="link-name">Macro 404</span></td>
-              <td>Someone deleted or renamed it · silent breakage if not caught</td>
-            </tr>
-            <tr>
-              <td><span class="link-name">Pattern missing</span></td>
-              <td>Macro body manually rewritten · flow can't safely find-and-replace</td>
-            </tr>
-            <tr>
-              <td><span class="link-name">0 live links</span></td>
-              <td>Previous rotation silently failed · highest urgency · customer impact imminent</td>
-            </tr>
-            <tr>
-              <td><span class="link-name">5xx × 2 runs</span></td>
-              <td>Sustained outage · first failure retries tomorrow, two in a row is real</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <!-- Activity log -->
