@@ -128,78 +128,122 @@
   .panel-sub { font-size: 11px; color: var(--text-dim); }
   .panel-body { padding: 16px; }
 
-  /* Flow */
-  .flow {
+  /* Power Automate-style canvas */
+  .pa-canvas {
+    background: #faf9f8;
+    border-radius: 6px;
+    padding: 22px 12px;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 0;
+    align-items: center;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   }
-  .flow-node {
-    background: var(--panel-3);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
+  .pa-card {
+    background: #ffffff;
+    border: 1px solid #e1dfdd;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    transition: box-shadow 0.25s, border-color 0.25s;
+    position: relative;
+  }
+  .pa-card.active {
+    border-color: #0078d4;
+    box-shadow: 0 0 0 2px rgba(0,120,212,0.22), 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .pa-card.done { border-color: #92c98d; }
+  .pa-card-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    position: relative;
-    transition: all 0.3s;
+    gap: 10px;
+    padding: 10px 12px;
   }
-  .flow-node.active {
-    border-color: var(--accent);
-    background: #2a1f1a;
-    box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.15);
-  }
-  .flow-node.done {
-    border-color: var(--success);
-    background: #1a2a1f;
-  }
-  .flow-icon {
-    width: 36px; height: 36px;
-    border-radius: 6px;
-    background: var(--panel-2);
-    border: 1px solid var(--border);
+  .pa-icon {
+    width: 32px; height: 32px;
+    border-radius: 3px;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px;
+    color: white;
     flex-shrink: 0;
   }
-  .flow-node.active .flow-icon { background: var(--accent-dim); border-color: var(--accent); }
-  .flow-node.done .flow-icon { background: var(--success-dim); border-color: var(--success); }
-  .flow-info { flex: 1; }
-  .flow-name { font-size: 13px; font-weight: 600; color: var(--text); }
-  .flow-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-  .flow-status {
-    font-size: 10px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
+  .pa-icon-schedule { background: #d29200; }
+  .pa-icon-linkly { background: #5f2eea; }
+  .pa-icon-zendesk { background: #03363D; }
+  .pa-icon-slack { background: #4a154b; }
+  .pa-card-meta { flex: 1; min-width: 0; }
+  .pa-card-title { font-size: 13px; font-weight: 600; color: #323130; line-height: 1.25; }
+  .pa-card-sub { font-size: 11px; color: #605e5c; margin-top: 1px; }
+  .pa-card-menu {
+    color: #a19f9d;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 4px;
+    cursor: default;
+    user-select: none;
   }
-  .flow-node.done .flow-status { color: var(--success); }
-  .flow-node.active .flow-status { color: var(--accent); }
-  .flow-connector {
-    width: 2px;
-    height: 18px;
-    background: var(--border);
-    margin: 0 auto;
-    position: relative;
+  .pa-card-body {
+    padding: 8px 12px 10px;
+    font-size: 11px;
+    color: #605e5c;
+    line-height: 1.5;
+    border-top: 1px solid #f3f2f1;
   }
-  .flow-connector::after {
-    content: '';
+  .pa-card-body strong { color: #323130; font-weight: 600; }
+  .pa-status {
     position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 6px solid var(--border);
+    top: 8px;
+    right: 38px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    color: #605e5c;
+    background: #f3f2f1;
+    padding: 2px 6px;
+    border-radius: 2px;
+    pointer-events: none;
   }
-  .flow-connector.active { background: var(--accent); }
-  .flow-connector.active::after { border-top-color: var(--accent); }
-  .flow-connector.done { background: var(--success); }
-  .flow-connector.done::after { border-top-color: var(--success); }
+  .pa-card.active .pa-status {
+    background: rgba(0,120,212,0.14);
+    color: #0078d4;
+  }
+  .pa-card.done .pa-status {
+    background: #dff6dd;
+    color: #107c10;
+  }
+  .pa-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+  .pa-connector-line {
+    width: 2px;
+    height: 14px;
+    background: #c8c6c4;
+    transition: background 0.25s;
+  }
+  .pa-add-btn {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid #c8c6c4;
+    background: white;
+    color: #605e5c;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: default;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    line-height: 1;
+    margin: 2px 0;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .pa-connector.active .pa-connector-line { background: #0078d4; }
+  .pa-connector.active .pa-add-btn { border-color: #0078d4; color: #0078d4; }
+  .pa-connector.done .pa-connector-line { background: #92c98d; }
+  .pa-connector.done .pa-add-btn { border-color: #92c98d; color: #107c10; }
 
   /* Tables */
   .data-table {
@@ -407,54 +451,94 @@
         </div>
       </div>
       <div class="panel-body">
-        <div class="flow" id="flow">
-          <div class="flow-node done" data-step="0">
-            <div class="flow-icon">⏱</div>
-            <div class="flow-info">
-              <div class="flow-name">Schedule trigger</div>
-              <div class="flow-desc">Cron · 02:00 UTC every Tue + Fri</div>
+        <div class="pa-canvas" id="flow">
+          <div class="pa-card done" data-step="0">
+            <div class="pa-card-header">
+              <div class="pa-icon pa-icon-schedule">⏱</div>
+              <div class="pa-card-meta">
+                <div class="pa-card-title">Recurrence</div>
+                <div class="pa-card-sub">Schedule · trigger</div>
+              </div>
+              <div class="pa-card-menu">⋯</div>
             </div>
-            <div class="flow-status">Triggered</div>
+            <div class="pa-card-body"><strong>Interval:</strong> Every Tue and Fri at 02:00 UTC<br><strong>Time zone:</strong> Coordinated Universal Time</div>
+            <div class="pa-status">Triggered</div>
           </div>
-          <div class="flow-connector done"></div>
 
-          <div class="flow-node done" data-step="1">
-            <div class="flow-icon">🔗</div>
-            <div class="flow-info">
-              <div class="flow-name">Fetch Linkly destinations</div>
-              <div class="flow-desc">GET /api/links · 3 tracked redirects</div>
-            </div>
-            <div class="flow-status">3 fetched</div>
+          <div class="pa-connector done">
+            <div class="pa-connector-line"></div>
+            <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+            <div class="pa-connector-line"></div>
           </div>
-          <div class="flow-connector done"></div>
 
-          <div class="flow-node done" data-step="2">
-            <div class="flow-icon">🔄</div>
-            <div class="flow-info">
-              <div class="flow-name">Rotate destinations</div>
-              <div class="flow-desc">Apply new T2 session + onboarding URLs from help center</div>
+          <div class="pa-card done" data-step="1">
+            <div class="pa-card-header">
+              <div class="pa-icon pa-icon-linkly">🔗</div>
+              <div class="pa-card-meta">
+                <div class="pa-card-title">LinklyHQ</div>
+                <div class="pa-card-sub">HTTP · get tracked links</div>
+              </div>
+              <div class="pa-card-menu">⋯</div>
             </div>
-            <div class="flow-status">3 rotated</div>
+            <div class="pa-card-body"><strong>Method:</strong> GET /api/v1/links<br><strong>Returns:</strong> 3 tracked redirects</div>
+            <div class="pa-status">3 fetched</div>
           </div>
-          <div class="flow-connector done"></div>
 
-          <div class="flow-node done" data-step="3">
-            <div class="flow-icon">📝</div>
-            <div class="flow-info">
-              <div class="flow-name">Update Zendesk macros</div>
-              <div class="flow-desc">PUT /api/v2/macros · find &amp; replace INSERT LINK</div>
-            </div>
-            <div class="flow-status">7 updated</div>
+          <div class="pa-connector done">
+            <div class="pa-connector-line"></div>
+            <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+            <div class="pa-connector-line"></div>
           </div>
-          <div class="flow-connector done"></div>
 
-          <div class="flow-node done" data-step="4">
-            <div class="flow-icon">✓</div>
-            <div class="flow-info">
-              <div class="flow-name">Verify + log</div>
-              <div class="flow-desc">Confirm macros render correctly · post to T2 Slack channel</div>
+          <div class="pa-card done" data-step="2">
+            <div class="pa-card-header">
+              <div class="pa-icon pa-icon-linkly">🔄</div>
+              <div class="pa-card-meta">
+                <div class="pa-card-title">LinklyHQ</div>
+                <div class="pa-card-sub">HTTP · rotate destinations</div>
+              </div>
+              <div class="pa-card-menu">⋯</div>
             </div>
-            <div class="flow-status">OK</div>
+            <div class="pa-card-body"><strong>Method:</strong> PATCH /api/v1/links/{id}<br><strong>Body:</strong> new URL from help-center source</div>
+            <div class="pa-status">3 rotated</div>
+          </div>
+
+          <div class="pa-connector done">
+            <div class="pa-connector-line"></div>
+            <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+            <div class="pa-connector-line"></div>
+          </div>
+
+          <div class="pa-card done" data-step="3">
+            <div class="pa-card-header">
+              <div class="pa-icon pa-icon-zendesk">📝</div>
+              <div class="pa-card-meta">
+                <div class="pa-card-title">Zendesk</div>
+                <div class="pa-card-sub">Apply to each · update macro</div>
+              </div>
+              <div class="pa-card-menu">⋯</div>
+            </div>
+            <div class="pa-card-body"><strong>Method:</strong> PUT /api/v2/macros/{id}<br><strong>Action:</strong> replace [INSERT LINK] with current URL · 7 macros</div>
+            <div class="pa-status">7 updated</div>
+          </div>
+
+          <div class="pa-connector done">
+            <div class="pa-connector-line"></div>
+            <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+            <div class="pa-connector-line"></div>
+          </div>
+
+          <div class="pa-card done" data-step="4">
+            <div class="pa-card-header">
+              <div class="pa-icon pa-icon-slack">✓</div>
+              <div class="pa-card-meta">
+                <div class="pa-card-title">Slack</div>
+                <div class="pa-card-sub">Post message · #t2-range</div>
+              </div>
+              <div class="pa-card-menu">⋯</div>
+            </div>
+            <div class="pa-card-body"><strong>Message:</strong> "Linkly rotation complete — 3 links + 7 macros updated"</div>
+            <div class="pa-status">OK</div>
           </div>
         </div>
         <div class="schedule-info">
@@ -564,13 +648,13 @@ const flow = document.getElementById('flow');
 const toast = document.getElementById('toast');
 
 function resetFlow() {
-  flow.querySelectorAll('.flow-node').forEach(n => {
+  flow.querySelectorAll('.pa-card').forEach(n => {
     n.classList.remove('active', 'done');
   });
-  flow.querySelectorAll('.flow-connector').forEach(c => {
+  flow.querySelectorAll('.pa-connector').forEach(c => {
     c.classList.remove('active', 'done');
   });
-  flow.querySelectorAll('.flow-status').forEach(s => s.textContent = 'Pending');
+  flow.querySelectorAll('.pa-status').forEach(s => s.textContent = 'Pending');
 }
 
 function resetMacros() {
@@ -596,12 +680,12 @@ async function runFlow() {
   resetMacros();
   await sleep(300);
 
-  const nodes = flow.querySelectorAll('.flow-node');
-  const connectors = flow.querySelectorAll('.flow-connector');
+  const nodes = flow.querySelectorAll('.pa-card');
+  const connectors = flow.querySelectorAll('.pa-connector');
 
   for (let i = 0; i < nodes.length; i++) {
     nodes[i].classList.add('active');
-    nodes[i].querySelector('.flow-status').textContent = 'Running...';
+    nodes[i].querySelector('.pa-status').textContent = 'Running';
 
     // Special: at step 3, animate macro updates
     if (i === 3) {
@@ -622,7 +706,7 @@ async function runFlow() {
 
     nodes[i].classList.remove('active');
     nodes[i].classList.add('done');
-    nodes[i].querySelector('.flow-status').textContent = stepLabels[i];
+    nodes[i].querySelector('.pa-status').textContent = stepLabels[i];
 
     if (connectors[i]) {
       connectors[i].classList.add('done');
