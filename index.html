@@ -3,34 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linkly Auto-Refresh — Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Linkly Rotator — Demo</title>
 <style>
   :root {
-    --bg: #1a1a1a;
-    --panel: #232323;
-    --panel-2: #2a2a2a;
-    --panel-3: #1f1f1f;
-    --border: #333;
-    --text: #e8e8e8;
-    --text-dim: #8a8a8a;
-    --text-mid: #b8b8b8;
-    --accent: #d97757;
-    --accent-dim: #5a3a2c;
-    --success: #4a9d6a;
-    --success-dim: #1f3a2a;
-    --warn: #d4a548;
-    --warn-dim: #3a2f1a;
-    --info: #5b8db8;
-    --info-dim: #1f2f3f;
+    --bg: #ffffff;
+    --panel: #ffffff;
+    --panel-2: #fafafa;
+    --panel-3: #f5f5f5;
+    --border: #C1C1C1;
+    --border-light: #E6E6E6;
+    --text: #191919;
+    --text-dim: #7F7F7F;
+    --text-mid: #414141;
+    --accent: #EC691A;
+    --accent-dim: #fce6d5;
+    --success: #2e7d4d;
+    --success-dim: #e6f4ec;
+    --warn: #b07a00;
+    --warn-dim: #fff3d6;
+    --info: #2f6a99;
+    --info-dim: #e8f1f8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
-    color: var(--text);
+    color: var(--text-mid);
     min-height: 100vh;
     font-size: 14px;
   }
+  .title, .status-card-value, .panel-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--text);
+  }
+  .status-card-value.accent { color: var(--accent); }
+  .status-card-value.success { color: var(--success); }
   .app { display: flex; flex-direction: column; min-height: 100vh; }
 
   /* Top header */
@@ -299,17 +311,18 @@
   .data-table th {
     text-align: left;
     padding: 8px 12px;
-    background: var(--panel-3);
-    color: var(--text-dim);
+    background: #4D4D4D;
+    color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 10px;
     letter-spacing: 0.05em;
     border-bottom: 1px solid var(--border);
+    font-family: 'Inter', sans-serif;
   }
   .data-table td {
     padding: 10px 12px;
-    border-bottom: 1px solid #2a2a2a;
+    border-bottom: 1px solid var(--border-light);
     color: var(--text-mid);
   }
   .data-table tr:last-child td { border-bottom: none; }
@@ -360,7 +373,7 @@
     background: #161616;
     padding: 6px 8px;
     border-radius: 4px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid var(--border-light);
   }
   .macro-content .placeholder { color: var(--warn); background: var(--warn-dim); padding: 1px 4px; border-radius: 2px; }
   .macro-content .resolved { color: var(--success); }
@@ -397,7 +410,7 @@
     grid-template-columns: 100px 1fr;
     gap: 12px;
     padding: 8px 0;
-    border-bottom: 1px solid #2a2a2a;
+    border-bottom: 1px solid var(--border-light);
     font-size: 12px;
   }
   .log-row:last-child { border-bottom: none; }
@@ -422,7 +435,7 @@
     display: none;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
   }
   .toast.show { display: flex; animation: slideIn 0.3s ease; }
   @keyframes slideIn {
