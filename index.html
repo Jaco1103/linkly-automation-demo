@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linkly Auto-Refresh — Demo</title>
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --panel: #232323;
+    --panel-2: #2a2a2a;
+    --panel-3: #1f1f1f;
+    --border: #333;
+    --text: #e8e8e8;
+    --text-dim: #8a8a8a;
+    --text-mid: #b8b8b8;
+    --accent: #d97757;
+    --accent-dim: #5a3a2c;
+    --success: #4a9d6a;
+    --success-dim: #1f3a2a;
+    --warn: #d4a548;
+    --warn-dim: #3a2f1a;
+    --info: #5b8db8;
+    --info-dim: #1f2f3f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+  .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* Top header */
+  .topbar {
+    padding: 14px 24px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 32px; height: 32px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-weight: 700; font-size: 14px;
+  }
+  .title-block .title { font-size: 14px; font-weight: 600; }
+  .title-block .sub { font-size: 11px; color: var(--text-dim); }
+  .demo-badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Status row */
+  .status-row {
+    padding: 16px 24px;
+    background: var(--panel-3);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .status-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .status-card-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .status-card-value { font-size: 16px; font-weight: 600; color: var(--text); }
+  .status-card-value.success { color: var(--success); }
+  .status-card-value.accent { color: var(--accent); }
+  .status-card-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--success); margin-right: 6px; vertical-align: middle;
+    box-shadow: 0 0 8px var(--success);
+  }
+  .dot.pulse { animation: pulse 1.8s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--success); }
+    50% { opacity: 0.5; box-shadow: 0 0 4px var(--success); }
+  }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 16px 24px 24px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel-3);
+  }
+  .panel-title { font-size: 13px; font-weight: 600; }
+  .panel-sub { font-size: 11px; color: var(--text-dim); }
+  .panel-body { padding: 16px; }
+
+  /* Flow */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .flow-node {
+    background: var(--panel-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .flow-node.active {
+    border-color: var(--accent);
+    background: #2a1f1a;
+    box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.15);
+  }
+  .flow-node.done {
+    border-color: var(--success);
+    background: #1a2a1f;
+  }
+  .flow-icon {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .flow-node.active .flow-icon { background: var(--accent-dim); border-color: var(--accent); }
+  .flow-node.done .flow-icon { background: var(--success-dim); border-color: var(--success); }
+  .flow-info { flex: 1; }
+  .flow-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .flow-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .flow-status {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .flow-node.done .flow-status { color: var(--success); }
+  .flow-node.active .flow-status { color: var(--accent); }
+  .flow-connector {
+    width: 2px;
+    height: 18px;
+    background: var(--border);
+    margin: 0 auto;
+    position: relative;
+  }
+  .flow-connector::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--border);
+  }
+  .flow-connector.active { background: var(--accent); }
+  .flow-connector.active::after { border-top-color: var(--accent); }
+  .flow-connector.done { background: var(--success); }
+  .flow-connector.done::after { border-top-color: var(--success); }
+
+  /* Tables */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--panel-3);
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #2a2a2a;
+    color: var(--text-mid);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .link-name { color: var(--text); font-weight: 500; }
+  .url-snippet {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .url-snippet.updated { color: var(--success); }
+  .updated-tag {
+    background: var(--success-dim);
+    color: var(--success);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: 6px;
+  }
+
+  /* Macros */
+  .macro-row {
+    background: var(--panel-3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+  }
+  .macro-row.updated {
+    border-color: var(--success);
+    background: #1a2a1f;
+  }
+  .macro-row.updated .updated-tag { display: inline-block; }
+  .macro-name {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .macro-content {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    background: #161616;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #2a2a2a;
+  }
+  .macro-content .placeholder { color: var(--warn); background: var(--warn-dim); padding: 1px 4px; border-radius: 2px; }
+  .macro-content .resolved { color: var(--success); }
+
+  /* Action button */
+  .run-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .run-btn:hover { background: #c66643; }
+  .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .secondary-btn {
+    background: var(--panel-2);
+    color: var(--text-mid);
+    border: 1px solid var(--border);
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .secondary-btn:hover { color: var(--text); border-color: var(--accent); }
+
+  /* Activity log */
+  .log-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 12px;
+  }
+  .log-row:last-child { border-bottom: none; }
+  .log-time { color: var(--text-dim); font-family: ui-monospace, monospace; font-size: 11px; }
+  .log-msg { color: var(--text-mid); }
+  .log-msg.success::before { content: '✓ '; color: var(--success); font-weight: 700; }
+  .log-msg.info::before { content: '• '; color: var(--info); }
+
+  .full-row { grid-column: 1 / -1; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--success-dim);
+    border: 1px solid var(--success);
+    color: var(--text);
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  .toast.show { display: flex; animation: slideIn 0.3s ease; }
+  @keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .schedule-info {
+    background: var(--info-dim);
+    border-left: 3px solid var(--info);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-mid);
+  }
+
+  @media (max-width: 1024px) {
+    .main { grid-template-columns: 1fr; }
+    .status-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo">L</div>
+      <div class="title-block">
+        <div class="title">Linkly Auto-Refresh</div>
+        <div class="sub">T2 link rotation · auto-syncs Zendesk macros</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="demo-badge">Demo</span>
+      <button class="secondary-btn" id="historyBtn">View history</button>
+      <button class="run-btn" id="runBtn">▶ Run now</button>
+    </div>
+  </header>
+
+  <section class="status-row">
+    <div class="status-card">
+      <div class="status-card-label">Status</div>
+      <div class="status-card-value success"><span class="dot pulse"></span>Healthy</div>
+      <div class="status-card-sub">All checks passing</div>
+    </div>
+    <div class="status-card">
+      <div class="status-card-label">Schedule</div>
+      <div class="status-card-value">Tue · Fri 02:00 UTC</div>
+      <div class="status-card-sub">Next run in 2d 14h</div>
+    </div>
+    <div class="status-card">
+      <div class="status-card-label">Last run</div>
+      <div class="status-card-value">Today 02:00 UTC</div>
+      <div class="status-card-sub">3 links rotated · 7 macros updated</div>
+    </div>
+    <div class="status-card">
+      <div class="status-card-label">Macros with "INSERT LINK"</div>
+      <div class="status-card-value accent">0</div>
+      <div class="status-card-sub">Was: 7 across 4 agents · last week</div>
+    </div>
+  </section>
+
+  <main class="main">
+    <!-- Flow panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Automation flow</div>
+          <div class="panel-sub">Power Automate · runs every Tue + Fri at 02:00 UTC</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="flow" id="flow">
+          <div class="flow-node done" data-step="0">
+            <div class="flow-icon">⏱</div>
+            <div class="flow-info">
+              <div class="flow-name">Schedule trigger</div>
+              <div class="flow-desc">Cron · 02:00 UTC every Tue + Fri</div>
+            </div>
+            <div class="flow-status">Triggered</div>
+          </div>
+          <div class="flow-connector done"></div>
+
+          <div class="flow-node done" data-step="1">
+            <div class="flow-icon">🔗</div>
+            <div class="flow-info">
+              <div class="flow-name">Fetch Linkly destinations</div>
+              <div class="flow-desc">GET /api/links · 3 tracked redirects</div>
+            </div>
+            <div class="flow-status">3 fetched</div>
+          </div>
+          <div class="flow-connector done"></div>
+
+          <div class="flow-node done" data-step="2">
+            <div class="flow-icon">🔄</div>
+            <div class="flow-info">
+              <div class="flow-name">Rotate destinations</div>
+              <div class="flow-desc">Apply new T2 session + onboarding URLs from help center</div>
+            </div>
+            <div class="flow-status">3 rotated</div>
+          </div>
+          <div class="flow-connector done"></div>
+
+          <div class="flow-node done" data-step="3">
+            <div class="flow-icon">📝</div>
+            <div class="flow-info">
+              <div class="flow-name">Update Zendesk macros</div>
+              <div class="flow-desc">PUT /api/v2/macros · find &amp; replace INSERT LINK</div>
+            </div>
+            <div class="flow-status">7 updated</div>
+          </div>
+          <div class="flow-connector done"></div>
+
+          <div class="flow-node done" data-step="4">
+            <div class="flow-icon">✓</div>
+            <div class="flow-info">
+              <div class="flow-name">Verify + log</div>
+              <div class="flow-desc">Confirm macros render correctly · post to T2 Slack channel</div>
+            </div>
+            <div class="flow-status">OK</div>
+          </div>
+        </div>
+        <div class="schedule-info">
+          Manual chore eliminated: ~12 min × 2 runs/week × 52 weeks = <strong>~20 hours/year saved</strong>, plus zero agent-facing "INSERT LINK" mistakes.
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: links + macros -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Tracked Linkly destinations</div>
+            <div class="panel-sub">3 redirects · auto-rotated 2×/week</div>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Linkly slug</th><th>Current destination</th><th>Rotated</th></tr>
+          </thead>
+          <tbody id="linksTable">
+            <tr>
+              <td><span class="link-name">/t2-session</span></td>
+              <td><span class="url-snippet">calendly.com/trk-t2/range-...</span></td>
+              <td>Today 02:00</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">/onboarding</span></td>
+              <td><span class="url-snippet">help.trackman.com/range/onb-2026q2</span></td>
+              <td>Today 02:00</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">/troubleshoot</span></td>
+              <td><span class="url-snippet">help.trackman.com/range/triage-flow</span></td>
+              <td>Today 02:00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Zendesk macros · auto-synced</div>
+            <div class="panel-sub">7 macros · no more "INSERT LINK"</div>
+          </div>
+        </div>
+        <div class="panel-body" id="macrosBody">
+          <div class="macro-row" data-macro="0">
+            <div class="macro-name">"Book T2 session" macro <span class="updated-tag" style="display:none;">Updated</span></div>
+            <div class="macro-content">Hi {{ticket.requester.first_name}}, please book a session here: <span class="placeholder" id="m0">[INSERT LINK]</span></div>
+          </div>
+          <div class="macro-row" data-macro="1">
+            <div class="macro-name">"Onboarding resources" macro <span class="updated-tag" style="display:none;">Updated</span></div>
+            <div class="macro-content">Welcome! Onboarding guide: <span class="placeholder" id="m1">[INSERT LINK]</span></div>
+          </div>
+          <div class="macro-row" data-macro="2">
+            <div class="macro-name">"Self-service troubleshoot" macro <span class="updated-tag" style="display:none;">Updated</span></div>
+            <div class="macro-content">Try the triage flow first — <span class="placeholder" id="m2">[INSERT LINK]</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity log -->
+    <div class="panel full-row">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Recent activity</div>
+          <div class="panel-sub">Last 4 runs</div>
+        </div>
+      </div>
+      <div class="panel-body" id="logBody">
+        <div class="log-row">
+          <div class="log-time">02:00:04</div>
+          <div class="log-msg success">Today · 3 Linkly links rotated, 7 Zendesk macros updated, posted to #t2-range</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:03</div>
+          <div class="log-msg success">Fri 17 May · 3 Linkly links rotated, 7 Zendesk macros updated</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:05</div>
+          <div class="log-msg success">Tue 14 May · 3 Linkly links rotated, 7 Zendesk macros updated</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:02</div>
+          <div class="log-msg info">Fri 10 May · First scheduled run · backfilled 7 macros (was: 7 with INSERT LINK)</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast">✓ Run complete · 3 links rotated · 7 macros synced</div>
+
+<script>
+const newUrls = [
+  'calendly.com/trk-t2/range-w22',
+  'help.trackman.com/range/onb-2026q2-v3',
+  'help.trackman.com/range/triage-flow-v2'
+];
+
+const runBtn = document.getElementById('runBtn');
+const flow = document.getElementById('flow');
+const toast = document.getElementById('toast');
+
+function resetFlow() {
+  flow.querySelectorAll('.flow-node').forEach(n => {
+    n.classList.remove('active', 'done');
+  });
+  flow.querySelectorAll('.flow-connector').forEach(c => {
+    c.classList.remove('active', 'done');
+  });
+  flow.querySelectorAll('.flow-status').forEach(s => s.textContent = 'Pending');
+}
+
+function resetMacros() {
+  document.querySelectorAll('.macro-row').forEach(r => {
+    r.classList.remove('updated');
+    r.querySelector('.updated-tag').style.display = 'none';
+  });
+  document.getElementById('m0').outerHTML = '<span class="placeholder" id="m0">[INSERT LINK]</span>';
+  document.getElementById('m1').outerHTML = '<span class="placeholder" id="m1">[INSERT LINK]</span>';
+  document.getElementById('m2').outerHTML = '<span class="placeholder" id="m2">[INSERT LINK]</span>';
+}
+
+async function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+const stepLabels = ['Triggered', '3 fetched', '3 rotated', '7 updated', 'OK'];
+
+async function runFlow() {
+  runBtn.disabled = true;
+  runBtn.textContent = 'Running...';
+  resetFlow();
+  resetMacros();
+  await sleep(300);
+
+  const nodes = flow.querySelectorAll('.flow-node');
+  const connectors = flow.querySelectorAll('.flow-connector');
+
+  for (let i = 0; i < nodes.length; i++) {
+    nodes[i].classList.add('active');
+    nodes[i].querySelector('.flow-status').textContent = 'Running...';
+
+    // Special: at step 3, animate macro updates
+    if (i === 3) {
+      await sleep(400);
+      for (let m = 0; m < 3; m++) {
+        const el = document.getElementById('m' + m);
+        if (el) {
+          el.outerHTML = `<span class="resolved" id="m${m}">${newUrls[m]}</span>`;
+        }
+        const row = document.querySelector(`.macro-row[data-macro="${m}"]`);
+        row.classList.add('updated');
+        row.querySelector('.updated-tag').style.display = 'inline-block';
+        await sleep(250);
+      }
+    } else {
+      await sleep(600);
+    }
+
+    nodes[i].classList.remove('active');
+    nodes[i].classList.add('done');
+    nodes[i].querySelector('.flow-status').textContent = stepLabels[i];
+
+    if (connectors[i]) {
+      connectors[i].classList.add('done');
+    }
+    await sleep(150);
+  }
+
+  // Add log entry
+  const logBody = document.getElementById('logBody');
+  const now = new Date();
+  const time = now.toTimeString().slice(0,8);
+  const entry = document.createElement('div');
+  entry.className = 'log-row';
+  entry.innerHTML = `<div class="log-time">${time}</div><div class="log-msg success">Manual run · 3 Linkly links rotated, 7 Zendesk macros updated</div>`;
+  logBody.insertBefore(entry, logBody.firstChild);
+
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+
+  runBtn.disabled = false;
+  runBtn.textContent = '▶ Run now';
+}
+
+runBtn.addEventListener('click', runFlow);
+
+document.getElementById('historyBtn').addEventListener('click', () => {
+  alert('Demo: a real deployment would show full run history with diffs of which URLs changed.');
+});
+</script>
+</body>
+</html>
