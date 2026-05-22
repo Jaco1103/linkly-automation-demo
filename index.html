@@ -170,7 +170,52 @@
   .pa-icon-schedule { background: #d29200; }
   .pa-icon-linkly { background: #5f2eea; }
   .pa-icon-zendesk { background: #03363D; }
-  .pa-icon-slack { background: #4a154b; }
+  .pa-icon-sharepoint { background: #036c70; }
+  .pa-icon-condition { background: #d83b01; }
+  .pa-loop {
+    width: 100%;
+    max-width: 360px;
+    background: #f3f2f1;
+    border: 1.5px dashed #c8c6c4;
+    border-radius: 6px;
+    padding: 10px 10px 12px;
+    transition: border-color 0.25s;
+  }
+  .pa-loop.active { border-color: #0078d4; background: #f0f6fc; }
+  .pa-loop.done { border-color: #92c98d; background: #f1f8f0; }
+  .pa-loop-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 2px 4px 10px;
+  }
+  .pa-loop-icon {
+    width: 28px; height: 28px;
+    background: #5c2d91;
+    color: white;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .pa-loop-meta { flex: 1; min-width: 0; }
+  .pa-loop-title { font-size: 12px; font-weight: 600; color: #323130; line-height: 1.25; }
+  .pa-loop-sub { font-size: 11px; color: #605e5c; }
+  .pa-loop-progress {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    color: #605e5c;
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid #e1dfdd;
+  }
+  .pa-loop.active .pa-loop-progress { color: #0078d4; border-color: #b3d7f0; background: rgba(0,120,212,0.06); }
+  .pa-loop.done .pa-loop-progress { color: #107c10; border-color: #c6e4c1; background: #dff6dd; }
+  .pa-loop-body { display: flex; flex-direction: column; align-items: stretch; }
+  .pa-loop .pa-card { max-width: 100%; }
   .pa-card-meta { flex: 1; min-width: 0; }
   .pa-card-title { font-size: 13px; font-weight: 600; color: #323130; line-height: 1.25; }
   .pa-card-sub { font-size: 11px; color: #605e5c; margin-top: 1px; }
@@ -407,8 +452,8 @@
     <div class="topbar-left">
       <div class="logo">L</div>
       <div class="title-block">
-        <div class="title">Linkly Auto-Refresh</div>
-        <div class="sub">T2 link rotation · auto-syncs Zendesk macros</div>
+        <div class="title">TM · Linkly Rotator</div>
+        <div class="sub">Power Automate · daily 02:00 UTC · 6 sub-types · Linkly + Zendesk + SharePoint</div>
       </div>
     </div>
     <div style="display: flex; align-items: center; gap: 12px;">
@@ -426,18 +471,18 @@
     </div>
     <div class="status-card">
       <div class="status-card-label">Schedule</div>
-      <div class="status-card-value">Tue · Fri 02:00 UTC</div>
-      <div class="status-card-sub">Next run in 2d 14h</div>
+      <div class="status-card-value">Daily 02:00 UTC</div>
+      <div class="status-card-sub">Next run in 16h 14m</div>
     </div>
     <div class="status-card">
       <div class="status-card-label">Last run</div>
       <div class="status-card-value">Today 02:00 UTC</div>
-      <div class="status-card-sub">3 links rotated · 7 macros updated</div>
+      <div class="status-card-sub">6/6 sub-types synced · 1 rotation, 5 no-op</div>
     </div>
     <div class="status-card">
-      <div class="status-card-label">Macros with "INSERT LINK"</div>
-      <div class="status-card-value accent">0</div>
-      <div class="status-card-sub">Was: 7 across 4 agents · last week</div>
+      <div class="status-card-label">Macros with "INSERT LINK HERE"</div>
+      <div class="status-card-value accent">0 / 6</div>
+      <div class="status-card-sub">Was: 6/6 before automation</div>
     </div>
   </section>
 
@@ -446,8 +491,8 @@
     <div class="panel">
       <div class="panel-header">
         <div>
-          <div class="panel-title">Automation flow</div>
-          <div class="panel-sub">Power Automate · runs every Tue + Fri at 02:00 UTC</div>
+          <div class="panel-title">Power Automate flow</div>
+          <div class="panel-sub">~18 actions · Apply-to-each over 6 sub-types · idempotent writes</div>
         </div>
       </div>
       <div class="panel-body">
@@ -461,7 +506,7 @@
               </div>
               <div class="pa-card-menu">⋯</div>
             </div>
-            <div class="pa-card-body"><strong>Interval:</strong> Every Tue and Fri at 02:00 UTC<br><strong>Time zone:</strong> Coordinated Universal Time</div>
+            <div class="pa-card-body"><strong>Frequency:</strong> Day<br><strong>At these times:</strong> 02:00 UTC</div>
             <div class="pa-status">Triggered</div>
           </div>
 
@@ -473,15 +518,15 @@
 
           <div class="pa-card done" data-step="1">
             <div class="pa-card-header">
-              <div class="pa-icon pa-icon-linkly">🔗</div>
+              <div class="pa-icon pa-icon-sharepoint">📋</div>
               <div class="pa-card-meta">
-                <div class="pa-card-title">LinklyHQ</div>
-                <div class="pa-card-sub">HTTP · get tracked links</div>
+                <div class="pa-card-title">Get items</div>
+                <div class="pa-card-sub">SharePoint · linkly_config</div>
               </div>
               <div class="pa-card-menu">⋯</div>
             </div>
-            <div class="pa-card-body"><strong>Method:</strong> GET /api/v1/links<br><strong>Returns:</strong> 3 tracked redirects</div>
-            <div class="pa-status">3 fetched</div>
+            <div class="pa-card-body"><strong>List:</strong> linkly_config<br><strong>Returns:</strong> 6 sub-type rows</div>
+            <div class="pa-status">6 rows</div>
           </div>
 
           <div class="pa-connector done">
@@ -490,59 +535,104 @@
             <div class="pa-connector-line"></div>
           </div>
 
-          <div class="pa-card done" data-step="2">
-            <div class="pa-card-header">
-              <div class="pa-icon pa-icon-linkly">🔄</div>
-              <div class="pa-card-meta">
-                <div class="pa-card-title">LinklyHQ</div>
-                <div class="pa-card-sub">HTTP · rotate destinations</div>
+          <div class="pa-loop done" data-step="2">
+            <div class="pa-loop-header">
+              <div class="pa-loop-icon">↻</div>
+              <div class="pa-loop-meta">
+                <div class="pa-loop-title">Apply to each</div>
+                <div class="pa-loop-sub">sub-type · iterates 6×</div>
               </div>
-              <div class="pa-card-menu">⋯</div>
+              <span class="pa-loop-progress">6 / 6</span>
             </div>
-            <div class="pa-card-body"><strong>Method:</strong> PATCH /api/v1/links/{id}<br><strong>Body:</strong> new URL from help-center source</div>
-            <div class="pa-status">3 rotated</div>
-          </div>
-
-          <div class="pa-connector done">
-            <div class="pa-connector-line"></div>
-            <button class="pa-add-btn" type="button" tabindex="-1">+</button>
-            <div class="pa-connector-line"></div>
-          </div>
-
-          <div class="pa-card done" data-step="3">
-            <div class="pa-card-header">
-              <div class="pa-icon pa-icon-zendesk">📝</div>
-              <div class="pa-card-meta">
-                <div class="pa-card-title">Zendesk</div>
-                <div class="pa-card-sub">Apply to each · update macro</div>
+            <div class="pa-loop-body">
+              <div class="pa-card done" data-step="2a">
+                <div class="pa-card-header">
+                  <div class="pa-icon pa-icon-linkly">🔗</div>
+                  <div class="pa-card-meta">
+                    <div class="pa-card-title">LinklyHQ</div>
+                    <div class="pa-card-sub">HTTP · GET soonest-expiring</div>
+                  </div>
+                  <div class="pa-card-menu">⋯</div>
+                </div>
+                <div class="pa-card-body"><strong>GET</strong> /api/v1/links<br><strong>Filter:</strong> name startsWith <code>[prefix]</code> · pick min(expires_at)</div>
               </div>
-              <div class="pa-card-menu">⋯</div>
-            </div>
-            <div class="pa-card-body"><strong>Method:</strong> PUT /api/v2/macros/{id}<br><strong>Action:</strong> replace [INSERT LINK] with current URL · 7 macros</div>
-            <div class="pa-status">7 updated</div>
-          </div>
 
-          <div class="pa-connector done">
-            <div class="pa-connector-line"></div>
-            <button class="pa-add-btn" type="button" tabindex="-1">+</button>
-            <div class="pa-connector-line"></div>
-          </div>
-
-          <div class="pa-card done" data-step="4">
-            <div class="pa-card-header">
-              <div class="pa-icon pa-icon-slack">✓</div>
-              <div class="pa-card-meta">
-                <div class="pa-card-title">Slack</div>
-                <div class="pa-card-sub">Post message · #t2-range</div>
+              <div class="pa-connector done">
+                <div class="pa-connector-line"></div>
+                <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+                <div class="pa-connector-line"></div>
               </div>
-              <div class="pa-card-menu">⋯</div>
+
+              <div class="pa-card done" data-step="2b">
+                <div class="pa-card-header">
+                  <div class="pa-icon pa-icon-condition">⚐</div>
+                  <div class="pa-card-meta">
+                    <div class="pa-card-title">Condition</div>
+                    <div class="pa-card-sub">expires_at &lt; addDays(utcNow, 1)</div>
+                  </div>
+                  <div class="pa-card-menu">⋯</div>
+                </div>
+                <div class="pa-card-body"><strong>If yes:</strong> POST replacement (true duplicate of soonest link + new expires_at)<br><strong>If no:</strong> skip — link still valid</div>
+              </div>
+
+              <div class="pa-connector done">
+                <div class="pa-connector-line"></div>
+                <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+                <div class="pa-connector-line"></div>
+              </div>
+
+              <div class="pa-card done" data-step="2c">
+                <div class="pa-card-header">
+                  <div class="pa-icon pa-icon-zendesk">📝</div>
+                  <div class="pa-card-meta">
+                    <div class="pa-card-title">Zendesk</div>
+                    <div class="pa-card-sub">HTTP · GET macro</div>
+                  </div>
+                  <div class="pa-card-menu">⋯</div>
+                </div>
+                <div class="pa-card-body"><strong>GET</strong> /api/v2/macros/{macro_id}.json<br><strong>Extract:</strong> current_url from macro body</div>
+              </div>
+
+              <div class="pa-connector done">
+                <div class="pa-connector-line"></div>
+                <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+                <div class="pa-connector-line"></div>
+              </div>
+
+              <div class="pa-card done" data-step="2d">
+                <div class="pa-card-header">
+                  <div class="pa-icon pa-icon-condition">⚐</div>
+                  <div class="pa-card-meta">
+                    <div class="pa-card-title">Condition</div>
+                    <div class="pa-card-sub">freshest.short_url ≠ current_url</div>
+                  </div>
+                  <div class="pa-card-menu">⋯</div>
+                </div>
+                <div class="pa-card-body"><strong>If yes:</strong> PUT macro body with replaced URL<br><strong>If no:</strong> idempotent no-op (most days)</div>
+              </div>
+
+              <div class="pa-connector done">
+                <div class="pa-connector-line"></div>
+                <button class="pa-add-btn" type="button" tabindex="-1">+</button>
+                <div class="pa-connector-line"></div>
+              </div>
+
+              <div class="pa-card done" data-step="2e">
+                <div class="pa-card-header">
+                  <div class="pa-icon pa-icon-sharepoint">📋</div>
+                  <div class="pa-card-meta">
+                    <div class="pa-card-title">SharePoint</div>
+                    <div class="pa-card-sub">Update + Create item</div>
+                  </div>
+                  <div class="pa-card-menu">⋯</div>
+                </div>
+                <div class="pa-card-body"><strong>current_state:</strong> upsert live_url + last_synced_at<br><strong>sync_history:</strong> append row (sync / rotate / skip)</div>
+              </div>
             </div>
-            <div class="pa-card-body"><strong>Message:</strong> "Linkly rotation complete — 3 links + 7 macros updated"</div>
-            <div class="pa-status">OK</div>
           </div>
         </div>
         <div class="schedule-info">
-          Manual chore eliminated: ~12 min × 2 runs/week × 52 weeks = <strong>~20 hours/year saved</strong>, plus zero agent-facing "INSERT LINK" mistakes.
+          Idempotent by design — quiet days are a no-op log line, writes only on rotation days. Quiet run: <strong>~15–25s</strong> · Rotation run: <strong>~30–60s</strong>. The bigger prize isn't T2's weekly chore — it's every agent's mid-ticket Ctrl+Shift+V step gone, on every booking macro send.
         </div>
       </div>
     </div>
@@ -552,29 +642,50 @@
       <div class="panel">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Tracked Linkly destinations</div>
-            <div class="panel-sub">3 redirects · auto-rotated 2×/week</div>
+            <div class="panel-title">6 sub-types · current state</div>
+            <div class="panel-sub">SharePoint <code>current_state</code> · 2 live Linkly links per sub-type (staggered)</div>
           </div>
         </div>
         <table class="data-table">
           <thead>
-            <tr><th>Linkly slug</th><th>Current destination</th><th>Rotated</th></tr>
+            <tr><th>Sub-type</th><th>Linkly name</th><th>Live short URL</th><th>Zendesk macro</th></tr>
           </thead>
           <tbody id="linksTable">
-            <tr>
-              <td><span class="link-name">/t2-session</span></td>
-              <td><span class="url-snippet">calendly.com/trk-t2/range-...</span></td>
-              <td>Today 02:00</td>
+            <tr data-sub="T2">
+              <td><span class="link-name">T2</span></td>
+              <td><span class="url-snippet">[T2]</span></td>
+              <td><span class="url-snippet" id="u-T2">supportlink.trackman.com/k7Bn3R</span></td>
+              <td>Book a T2 Session</td>
             </tr>
-            <tr>
-              <td><span class="link-name">/onboarding</span></td>
-              <td><span class="url-snippet">help.trackman.com/range/onb-2026q2</span></td>
-              <td>Today 02:00</td>
+            <tr data-sub="ONB-BP1">
+              <td><span class="link-name">ONB-BP1</span></td>
+              <td><span class="url-snippet">[ONB-BP1]</span></td>
+              <td><span class="url-snippet" id="u-ONB-BP1">supportlink.trackman.com/p9Xq4M</span></td>
+              <td>Book Onboarding — 1st B&amp;P</td>
             </tr>
-            <tr>
-              <td><span class="link-name">/troubleshoot</span></td>
-              <td><span class="url-snippet">help.trackman.com/range/triage-flow</span></td>
-              <td>Today 02:00</td>
+            <tr data-sub="ONB-BP2">
+              <td><span class="link-name">ONB-BP2</span></td>
+              <td><span class="url-snippet">[ONB-BP2]</span></td>
+              <td><span class="url-snippet" id="u-ONB-BP2">supportlink.trackman.com/v2Lr8T</span></td>
+              <td>Book Onboarding — 2nd B&amp;P</td>
+            </tr>
+            <tr data-sub="ONB-DS">
+              <td><span class="link-name">ONB-DS</span></td>
+              <td><span class="url-snippet">[ONB-DS]</span></td>
+              <td><span class="url-snippet" id="u-ONB-DS">supportlink.trackman.com/c3Mp5Z</span></td>
+              <td>Book Onboarding — Diamond</td>
+            </tr>
+            <tr data-sub="ONB-GEN">
+              <td><span class="link-name">ONB-GEN</span></td>
+              <td><span class="url-snippet">[ONB-GEN]</span></td>
+              <td><span class="url-snippet" id="u-ONB-GEN">supportlink.trackman.com/g1Hf6N</span></td>
+              <td>Book Onboarding — General</td>
+            </tr>
+            <tr data-sub="KA">
+              <td><span class="link-name">KA</span></td>
+              <td><span class="url-snippet">[KA]</span></td>
+              <td><span class="url-snippet" id="u-KA">supportlink.trackman.com/nh3pXx</span></td>
+              <td>Book Key Account Session</td>
             </tr>
           </tbody>
         </table>
@@ -583,24 +694,41 @@
       <div class="panel">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Zendesk macros · auto-synced</div>
-            <div class="panel-sub">7 macros · no more "INSERT LINK"</div>
+            <div class="panel-title">Failures handled</div>
+            <div class="panel-sub">Caught by the Try/Catch scope · single transient 5xx auto-retries next day</div>
           </div>
         </div>
-        <div class="panel-body" id="macrosBody">
-          <div class="macro-row" data-macro="0">
-            <div class="macro-name">"Book T2 session" macro <span class="updated-tag" style="display:none;">Updated</span></div>
-            <div class="macro-content">Hi {{ticket.requester.first_name}}, please book a session here: <span class="placeholder" id="m0">[INSERT LINK]</span></div>
-          </div>
-          <div class="macro-row" data-macro="1">
-            <div class="macro-name">"Onboarding resources" macro <span class="updated-tag" style="display:none;">Updated</span></div>
-            <div class="macro-content">Welcome! Onboarding guide: <span class="placeholder" id="m1">[INSERT LINK]</span></div>
-          </div>
-          <div class="macro-row" data-macro="2">
-            <div class="macro-name">"Self-service troubleshoot" macro <span class="updated-tag" style="display:none;">Updated</span></div>
-            <div class="macro-content">Try the triage flow first — <span class="placeholder" id="m2">[INSERT LINK]</span></div>
-          </div>
-        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Failure</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="link-name">Linkly 401</span></td>
+              <td>API key expired or revoked · rotation stops · customers eventually hit dead links</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">Zendesk 401</span></td>
+              <td>API token expired · macros stop updating · agents send stale URLs</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">Macro 404</span></td>
+              <td>Someone deleted or renamed it · silent breakage if not caught</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">Pattern missing</span></td>
+              <td>Macro body manually rewritten · flow can't safely find-and-replace</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">0 live links</span></td>
+              <td>Previous rotation silently failed · highest urgency · customer impact imminent</td>
+            </tr>
+            <tr>
+              <td><span class="link-name">5xx × 2 runs</span></td>
+              <td>Sustained outage · first failure retries tomorrow, two in a row is real</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -614,105 +742,141 @@
       </div>
       <div class="panel-body" id="logBody">
         <div class="log-row">
+          <div class="log-time">02:00:18</div>
+          <div class="log-msg success">Today · KA · rotate · POST new link → PUT macro · old: …nh3pXx → new: …kT7q9R</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:14</div>
+          <div class="log-msg success">Today · ONB-GEN · sync · skip (no rotation, URL unchanged) · no-op</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:10</div>
+          <div class="log-msg success">Today · ONB-DS · sync · skip (no rotation, URL unchanged) · no-op</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:07</div>
+          <div class="log-msg success">Today · ONB-BP2 · sync · skip (no rotation, URL unchanged) · no-op</div>
+        </div>
+        <div class="log-row">
           <div class="log-time">02:00:04</div>
-          <div class="log-msg success">Today · 3 Linkly links rotated, 7 Zendesk macros updated, posted to #t2-range</div>
-        </div>
-        <div class="log-row">
-          <div class="log-time">02:00:03</div>
-          <div class="log-msg success">Fri 17 May · 3 Linkly links rotated, 7 Zendesk macros updated</div>
-        </div>
-        <div class="log-row">
-          <div class="log-time">02:00:05</div>
-          <div class="log-msg success">Tue 14 May · 3 Linkly links rotated, 7 Zendesk macros updated</div>
+          <div class="log-msg success">Today · ONB-BP1 · sync · skip (no rotation, URL unchanged) · no-op</div>
         </div>
         <div class="log-row">
           <div class="log-time">02:00:02</div>
-          <div class="log-msg info">Fri 10 May · First scheduled run · backfilled 7 macros (was: 7 with INSERT LINK)</div>
+          <div class="log-msg success">Today · T2 · sync · skip (no rotation, URL unchanged) · no-op</div>
+        </div>
+        <div class="log-row">
+          <div class="log-time">02:00:21</div>
+          <div class="log-msg info">Yesterday · 6/6 sub-types synced · 0 rotations · runtime 23s</div>
         </div>
       </div>
     </div>
   </main>
 </div>
 
-<div class="toast" id="toast">✓ Run complete · 3 links rotated · 7 macros synced</div>
+<div class="toast" id="toast">✓ Run complete · 6/6 sub-types synced · 1 rotation (KA)</div>
 
 <script>
-const newUrls = [
-  'calendly.com/trk-t2/range-w22',
-  'help.trackman.com/range/onb-2026q2-v3',
-  'help.trackman.com/range/triage-flow-v2'
-];
-
 const runBtn = document.getElementById('runBtn');
 const flow = document.getElementById('flow');
 const toast = document.getElementById('toast');
 
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
 function resetFlow() {
-  flow.querySelectorAll('.pa-card').forEach(n => {
-    n.classList.remove('active', 'done');
-  });
-  flow.querySelectorAll('.pa-connector').forEach(c => {
-    c.classList.remove('active', 'done');
-  });
+  flow.querySelectorAll('.pa-card').forEach(n => n.classList.remove('active', 'done'));
+  flow.querySelectorAll('.pa-loop').forEach(l => l.classList.remove('active', 'done'));
+  flow.querySelectorAll('.pa-connector').forEach(c => c.classList.remove('active', 'done'));
   flow.querySelectorAll('.pa-status').forEach(s => s.textContent = 'Pending');
+  const progress = flow.querySelector('.pa-loop-progress');
+  if (progress) progress.textContent = '0 / 6';
 }
 
-function resetMacros() {
-  document.querySelectorAll('.macro-row').forEach(r => {
-    r.classList.remove('updated');
-    r.querySelector('.updated-tag').style.display = 'none';
-  });
-  document.getElementById('m0').outerHTML = '<span class="placeholder" id="m0">[INSERT LINK]</span>';
-  document.getElementById('m1').outerHTML = '<span class="placeholder" id="m1">[INSERT LINK]</span>';
-  document.getElementById('m2').outerHTML = '<span class="placeholder" id="m2">[INSERT LINK]</span>';
+function resetTable() {
+  const ka = document.getElementById('u-KA');
+  if (ka) {
+    ka.textContent = 'supportlink.trackman.com/nh3pXx';
+    ka.classList.remove('updated');
+  }
 }
 
-async function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
+async function lightCard(selector, status, dwell) {
+  const card = flow.querySelector(selector);
+  if (!card) return;
+  card.classList.add('active');
+  const s = card.querySelector('.pa-status');
+  if (s && status === 'Running') s.textContent = 'Running';
+  await sleep(dwell);
+  card.classList.remove('active');
+  card.classList.add('done');
+  if (s && status && status !== 'Running') s.textContent = status;
 }
 
-const stepLabels = ['Triggered', '3 fetched', '3 rotated', '7 updated', 'OK'];
+async function lightInner(selector, dwell, onActive) {
+  const card = flow.querySelector(selector);
+  if (!card) return;
+  card.classList.add('active');
+  if (onActive) onActive();
+  await sleep(dwell);
+  card.classList.remove('active');
+  card.classList.add('done');
+}
+
+async function animateKaRotation() {
+  await sleep(150);
+  const ka = document.getElementById('u-KA');
+  if (ka) {
+    ka.textContent = 'supportlink.trackman.com/kT7q9R';
+    ka.classList.add('updated');
+  }
+}
+
+async function runLoop() {
+  const loop = flow.querySelector('.pa-loop');
+  const progress = loop.querySelector('.pa-loop-progress');
+  loop.classList.add('active');
+  await sleep(200);
+
+  const innerConnectors = loop.querySelectorAll('.pa-connector');
+
+  await lightInner('[data-step="2a"]', 350);
+  innerConnectors[0]?.classList.add('done');
+  await lightInner('[data-step="2b"]', 350);
+  innerConnectors[1]?.classList.add('done');
+  await lightInner('[data-step="2c"]', 350);
+  innerConnectors[2]?.classList.add('done');
+  await lightInner('[data-step="2d"]', 450, animateKaRotation);
+  innerConnectors[3]?.classList.add('done');
+  await lightInner('[data-step="2e"]', 350);
+
+  // Tick the iteration counter 1/6 → 6/6
+  for (let n = 1; n <= 6; n++) {
+    if (progress) progress.textContent = `${n} / 6`;
+    await sleep(90);
+  }
+
+  loop.classList.remove('active');
+  loop.classList.add('done');
+}
 
 async function runFlow() {
   runBtn.disabled = true;
   runBtn.textContent = 'Running...';
   resetFlow();
-  resetMacros();
+  resetTable();
   await sleep(300);
 
-  const nodes = flow.querySelectorAll('.pa-card');
-  const connectors = flow.querySelectorAll('.pa-connector');
+  const outerConnectors = Array.from(flow.children).filter(c => c.classList.contains('pa-connector'));
 
-  for (let i = 0; i < nodes.length; i++) {
-    nodes[i].classList.add('active');
-    nodes[i].querySelector('.pa-status').textContent = 'Running';
+  await lightCard('[data-step="0"]', 'Triggered', 500);
+  outerConnectors[0]?.classList.add('done');
+  await sleep(120);
 
-    // Special: at step 3, animate macro updates
-    if (i === 3) {
-      await sleep(400);
-      for (let m = 0; m < 3; m++) {
-        const el = document.getElementById('m' + m);
-        if (el) {
-          el.outerHTML = `<span class="resolved" id="m${m}">${newUrls[m]}</span>`;
-        }
-        const row = document.querySelector(`.macro-row[data-macro="${m}"]`);
-        row.classList.add('updated');
-        row.querySelector('.updated-tag').style.display = 'inline-block';
-        await sleep(250);
-      }
-    } else {
-      await sleep(600);
-    }
+  await lightCard('[data-step="1"]', '6 rows', 600);
+  outerConnectors[1]?.classList.add('done');
+  await sleep(120);
 
-    nodes[i].classList.remove('active');
-    nodes[i].classList.add('done');
-    nodes[i].querySelector('.pa-status').textContent = stepLabels[i];
-
-    if (connectors[i]) {
-      connectors[i].classList.add('done');
-    }
-    await sleep(150);
-  }
+  await runLoop();
 
   // Add log entry
   const logBody = document.getElementById('logBody');
@@ -720,7 +884,7 @@ async function runFlow() {
   const time = now.toTimeString().slice(0,8);
   const entry = document.createElement('div');
   entry.className = 'log-row';
-  entry.innerHTML = `<div class="log-time">${time}</div><div class="log-msg success">Manual run · 3 Linkly links rotated, 7 Zendesk macros updated</div>`;
+  entry.innerHTML = `<div class="log-time">${time}</div><div class="log-msg success">Manual run · 6/6 sub-types synced · 1 rotation (KA), 5 no-op · runtime ~4s</div>`;
   logBody.insertBefore(entry, logBody.firstChild);
 
   toast.classList.add('show');
@@ -733,7 +897,7 @@ async function runFlow() {
 runBtn.addEventListener('click', runFlow);
 
 document.getElementById('historyBtn').addEventListener('click', () => {
-  alert('Demo: a real deployment would show full run history with diffs of which URLs changed.');
+  alert('Demo: a real deployment would show full sync_history rows from SharePoint — action (sync/rotate/skip/error), old + new URLs, timestamps.');
 });
 </script>
 </body>
