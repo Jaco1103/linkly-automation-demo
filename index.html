@@ -45,42 +45,72 @@
   .status-card-value.success { color: var(--success); }
   .app { display: flex; flex-direction: column; min-height: 100vh; }
 
-  /* Top header */
+  /* Hero card */
   .topbar {
-    padding: 14px 24px;
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
+    margin: 20px 24px 0;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, #EC691A 0%, #c5560c 100%);
+    border: none;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(236, 105, 26, 0.2), 0 2px 8px rgba(0,0,0,0.25);
   }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar::before {
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .topbar::after {
+    content: '';
+    position: absolute;
+    left: -80px;
+    bottom: -100px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(0,0,0,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .topbar > * { position: relative; z-index: 1; }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
   .logo {
-    width: 32px; height: 32px;
-    background: var(--accent-dim);
-    border: 1px solid var(--accent);
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.32);
     border-radius: 6px;
     display: flex; align-items: center; justify-content: center;
-    color: var(--accent); font-weight: 700; font-size: 14px;
+    color: white; font-weight: 700; font-size: 16px;
+    backdrop-filter: blur(8px);
   }
-  .title-block .title { font-size: 14px; font-weight: 600; }
-  .title-block .sub { font-size: 11px; color: var(--text-dim); }
+  .title-block .title { font-size: 22px; color: white; line-height: 1.1; }
+  .title-block .sub { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 4px; }
   .demo-badge {
-    background: var(--accent-dim);
-    color: var(--accent);
-    padding: 3px 8px;
+    background: rgba(255,255,255,0.14);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.32);
+    padding: 5px 11px;
     border-radius: 4px;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(8px);
   }
 
   /* Status row */
   .status-row {
-    padding: 16px 24px;
-    background: var(--panel-3);
-    border-bottom: 1px solid var(--border);
+    padding: 20px 24px 0;
+    background: transparent;
+    border-bottom: none;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
@@ -394,15 +424,22 @@
   .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .secondary-btn {
-    background: var(--panel-2);
-    color: var(--text-mid);
-    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
     padding: 7px 14px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
   }
-  .secondary-btn:hover { color: var(--text); border-color: var(--accent); }
+  .secondary-btn:hover { background: rgba(255,255,255,0.22); }
+  .run-btn-hero {
+    background: white !important;
+    color: var(--accent) !important;
+  }
+  .run-btn-hero:hover { background: #fafafa !important; color: #c5560c !important; }
 
   /* Activity log */
   .log-row {
@@ -472,7 +509,7 @@
     <div style="display: flex; align-items: center; gap: 12px;">
       <span class="demo-badge">Demo</span>
       <button class="secondary-btn" id="historyBtn">View history</button>
-      <button class="run-btn" id="runBtn">▶ Run now</button>
+      <button class="run-btn run-btn-hero" id="runBtn">▶ Run now</button>
     </div>
   </header>
 
